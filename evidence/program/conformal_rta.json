@@ -1,0 +1,147 @@
+{
+  "experiment": "conformal_recovery_deadline_rta",
+  "controller": "rma_student_latched (deployed)",
+  "fault_class": "GAIN (held-out, reversal-heavy)",
+  "warn_deg": 5.0,
+  "dt_s": 0.5,
+  "validation": {
+    "n_faults": 400,
+    "n_splits": 300,
+    "cal_frac": 0.5,
+    "method": "repeated random calibration/test splits; test coverage averaged over splits"
+  },
+  "recovery": {
+    "n": 400,
+    "recovered_frac": 0.9975,
+    "median_recovery_steps": 119.0,
+    "p95_recovery_steps": 161.7,
+    "max_finite_recovery_steps": 336
+  },
+  "recovery_pd_baseline": {
+    "n": 400,
+    "recovered_frac": 0.0025,
+    "median_recovery_steps": 399.0,
+    "p95_recovery_steps": 399.0,
+    "max_finite_recovery_steps": 399
+  },
+  "certificates": [
+    {
+      "alpha": 0.2,
+      "target_coverage": 0.8,
+      "splits_with_finite_deadline": 1.0,
+      "mean_conformal_coverage": 0.8079,
+      "std_conformal_coverage": 0.0382,
+      "median_conformal_deadline_steps": 137,
+      "median_conformal_deadline_s": 68.5,
+      "mean_heuristic_coverage": 0.9744
+    },
+    {
+      "alpha": 0.1,
+      "target_coverage": 0.9,
+      "splits_with_finite_deadline": 1.0,
+      "mean_conformal_coverage": 0.9019,
+      "std_conformal_coverage": 0.0309,
+      "median_conformal_deadline_steps": 147,
+      "median_conformal_deadline_s": 73.5,
+      "mean_heuristic_coverage": 0.9725
+    },
+    {
+      "alpha": 0.05,
+      "target_coverage": 0.95,
+      "splits_with_finite_deadline": 1.0,
+      "mean_conformal_coverage": 0.9502,
+      "std_conformal_coverage": 0.0203,
+      "median_conformal_deadline_steps": 170,
+      "median_conformal_deadline_s": 85.0,
+      "mean_heuristic_coverage": 0.973
+    }
+  ],
+  "pareto_safety_vs_autonomy": [
+    {
+      "alpha": 0.02,
+      "median_deadline_steps": 217,
+      "median_deadline_s": 108.5,
+      "mean_autonomy_coverage": 0.9813
+    },
+    {
+      "alpha": 0.06,
+      "median_deadline_steps": 158,
+      "median_deadline_s": 79.0,
+      "mean_autonomy_coverage": 0.9419
+    },
+    {
+      "alpha": 0.1,
+      "median_deadline_steps": 147,
+      "median_deadline_s": 73.5,
+      "mean_autonomy_coverage": 0.9038
+    },
+    {
+      "alpha": 0.14,
+      "median_deadline_steps": 143,
+      "median_deadline_s": 71.5,
+      "mean_autonomy_coverage": 0.8653
+    },
+    {
+      "alpha": 0.18,
+      "median_deadline_steps": 138,
+      "median_deadline_s": 69.0,
+      "mean_autonomy_coverage": 0.8277
+    },
+    {
+      "alpha": 0.22,
+      "median_deadline_steps": 135,
+      "median_deadline_s": 67.5,
+      "mean_autonomy_coverage": 0.7932
+    },
+    {
+      "alpha": 0.26,
+      "median_deadline_steps": 133,
+      "median_deadline_s": 66.5,
+      "mean_autonomy_coverage": 0.7491
+    },
+    {
+      "alpha": 0.3,
+      "median_deadline_steps": 130,
+      "median_deadline_s": 65.0,
+      "mean_autonomy_coverage": 0.7065
+    },
+    {
+      "alpha": 0.34,
+      "median_deadline_steps": 128,
+      "median_deadline_s": 64.0,
+      "mean_autonomy_coverage": 0.6669
+    },
+    {
+      "alpha": 0.38,
+      "median_deadline_steps": 126,
+      "median_deadline_s": 63.0,
+      "mean_autonomy_coverage": 0.6333
+    },
+    {
+      "alpha": 0.42,
+      "median_deadline_steps": 124,
+      "median_deadline_s": 62.0,
+      "mean_autonomy_coverage": 0.5902
+    },
+    {
+      "alpha": 0.46,
+      "median_deadline_steps": 122,
+      "median_deadline_s": 61.0,
+      "mean_autonomy_coverage": 0.5504
+    },
+    {
+      "alpha": 0.5,
+      "median_deadline_steps": 119,
+      "median_deadline_s": 59.5,
+      "mean_autonomy_coverage": 0.5095
+    }
+  ],
+  "rta_discrimination": {
+    "operating_alpha": 0.1,
+    "deadline_steps": 152,
+    "rma_latched_autonomy": 0.945,
+    "pd_fault_unaware_autonomy": 0.0,
+    "interpretation": "the recovering controller (RMA) is kept autonomous near the 1-alpha rate; the non-recovering one (PD) misses the deadline and is safe-held."
+  },
+  "guarantee": "split-conformal: E[P(recovery_steps <= d_alpha)] >= 1 - alpha over exchangeable faults (finite-sample, distribution-free), validated by mean test coverage ~ 1 - alpha across random splits. Replaces WP7's p95 x 1.3 heuristic, which has NO coverage guarantee."
+}

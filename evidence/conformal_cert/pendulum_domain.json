@@ -1,0 +1,111 @@
+{
+  "domain": "inverted_pendulum",
+  "description": "Torque-controlled inverted pendulum; actuator effectiveness/sign fault b (applied torque = b*u). DT=0.02s, horizon 8s, WARN=5deg, noisy rate sensing (sigma=0.15 rad/s). Mirrors the spacecraft WS2 conformal certificate.",
+  "n_faults": 400,
+  "calibration_reversal_fraction": 0.3,
+  "controllers": {
+    "adapting_online_signID": {
+      "n": 400,
+      "recovered_rate": 1.0,
+      "median_recovery_steps": 0.0,
+      "p95_recovery_steps": 36.0
+    },
+    "fixed_pd_fault_unaware": {
+      "n": 400,
+      "recovered_rate": 0.7175,
+      "median_recovery_steps": 0.0,
+      "p95_recovery_steps": 0.0
+    }
+  },
+  "certificate_coverage": [
+    {
+      "alpha": 0.2,
+      "target_coverage": 0.8,
+      "splits_with_finite_deadline": 1.0,
+      "mean_coverage": 0.8115,
+      "std_coverage": 0.0396,
+      "median_deadline": 29.0
+    },
+    {
+      "alpha": 0.1,
+      "target_coverage": 0.9,
+      "splits_with_finite_deadline": 1.0,
+      "mean_coverage": 0.9083,
+      "std_coverage": 0.0296,
+      "median_deadline": 33.0
+    },
+    {
+      "alpha": 0.05,
+      "target_coverage": 0.95,
+      "splits_with_finite_deadline": 1.0,
+      "mean_coverage": 0.9553,
+      "std_coverage": 0.0214,
+      "median_deadline": 36.0
+    }
+  ],
+  "pathology_and_cure": {
+    "alpha": 0.1,
+    "evaluated_on": "held-out reversal class",
+    "conformal_deadline_steps": 35,
+    "conformal_deadline_s": 0.7,
+    "latching_simplex_autonomy_adapting": 0.0,
+    "recovery_aware_autonomy_adapting": 0.8367,
+    "recovery_aware_autonomy_fixed": 0.0,
+    "note": "Every reversal forces a transient breach of the safe set, so a latching Simplex shield suppresses the adapting controller; recovery-aware engagement keeps it autonomous while catching the fault-unaware baseline."
+  },
+  "shift_coverage_B2": {
+    "alpha": 0.1,
+    "target_coverage": 0.9,
+    "calibration_dist": "P: 30% reversals",
+    "deployment_dist": "Q: 70% reversals (harder)",
+    "unweighted_coverage_on_Q": 0.86,
+    "weighted_coverage_on_Q": 0.935,
+    "unweighted_deadline_steps": 35,
+    "weighted_deadline_steps": 37,
+    "effective_sample_size": 115.4,
+    "note": "The P-calibrated deadline undercovers under the deployment shift Q; the weighted (exact likelihood-ratio) deadline restores coverage to >= 1-alpha."
+  },
+  "mondrian_deadlines_B2": {
+    "alpha": 0.1,
+    "per_class_steps": {
+      "reversed": 37,
+      "normal": 0
+    },
+    "note": "Group-conditional deadlines: coverage holds per fault class."
+  },
+  "baselines_B4": {
+    "latching_simplex": {
+      "autonomy_retention": 0.005,
+      "divergence_caught_before_critical": 1.0,
+      "mean_time_to_catch_steps": 4.5,
+      "coverage_guarantee": "none"
+    },
+    "heuristic_p95x1.3": {
+      "autonomy_retention": 1.0,
+      "divergence_caught_before_critical": 1.0,
+      "mean_time_to_catch_steps": 14.9,
+      "coverage_guarantee": "none (arbitrary margin)"
+    },
+    "cp_safety_value": {
+      "autonomy_retention": 0.935,
+      "divergence_caught_before_critical": 1.0,
+      "mean_time_to_catch_steps": 11.5,
+      "coverage_guarantee": "1-alpha on peak |theta| (tau=19.5deg)"
+    },
+    "conformal_recovery_deadline_ours": {
+      "autonomy_retention": 0.88,
+      "divergence_caught_before_critical": 1.0,
+      "mean_time_to_catch_steps": 14.9,
+      "coverage_guarantee": "1-alpha on recovery time"
+    },
+    "_thresholds": {
+      "alpha": 0.1,
+      "conformal_recovery_deadline_steps": 37,
+      "heuristic_deadline_steps": 51,
+      "cp_value_peak_threshold_deg": 19.55,
+      "critical_backstop_deg": 45.0,
+      "note": "Neural-Simplex reverse switching is omitted: on an open-loop-unstable plant a control-direction reversal disables the safe controller too (it shares the reversed actuator), so reverse switching degenerates to latching here."
+    }
+  },
+  "guarantee": "split-conformal: E[P(recovery_steps <= d_alpha)] >= 1 - alpha over exchangeable faults; weighted variant extends this to a known fault-distribution shift."
+}
